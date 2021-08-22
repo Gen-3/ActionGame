@@ -31,6 +31,7 @@ public class PlayerManager : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+//        weaponCollider = GetComponentInChildren<CapsuleCollider>();
         DisableWeaponCollider();
         isSlow = false;
         canAttack = true;
@@ -42,7 +43,7 @@ public class PlayerManager : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKey(KeyCode.J))
         {
             if (canAttack)
             {

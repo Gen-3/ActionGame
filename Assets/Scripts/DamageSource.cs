@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class DamageSource : MonoBehaviour
 {
-    public int damage;
+    public int damageAmount;
 }

@@ -15,7 +15,6 @@ public class EnemyAttackBehaviour : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("hitDamage");
-        Debug.Log("aaaaaaaaaaaa");
         animator.GetComponent<Transform>().rotation = Quaternion.Slerp(animator.GetComponent<Transform>().rotation,
                                       Quaternion.LookRotation(animator.GetComponent<EnemyManager>().target.transform.position- animator.GetComponent<EnemyManager>().transform.position),
                                       animator.GetComponent<EnemyManager>().applySpeed); ;

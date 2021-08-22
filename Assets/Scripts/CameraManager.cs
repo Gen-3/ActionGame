@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    GameObject targetObj;
+    public GameObject targetObj;
     Vector3 targetPos;
     public float camSpeed;
+    public Vector3 cameraPos;
 
     void Start()
     {
-        targetObj = GameObject.Find("Player");
+        //targetObj = GameObject.Find("Player");
         targetPos = targetObj.transform.position;
-        transform.position = targetPos + new Vector3(0, 5.5f, -10);
+        transform.position = targetPos + cameraPos;
     }
 
     void Update()
@@ -26,6 +27,10 @@ public class CameraManager : MonoBehaviour
             RotateCameraByMouse();
         }
 
+        if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftShift))
+        {
+            Start();
+        }
     }
 
     void MoveCamera()// targetの移動量分、自分（カメラ）も移動する

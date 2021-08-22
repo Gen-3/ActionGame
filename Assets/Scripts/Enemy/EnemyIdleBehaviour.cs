@@ -9,6 +9,8 @@ public class EnemyIdleBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<NavMeshAgent>().speed = 0;
+        animator.SetBool("start", false);
+
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -20,7 +22,6 @@ public class EnemyIdleBehaviour : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool("start", false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
