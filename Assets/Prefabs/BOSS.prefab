@@ -257,9 +257,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 318430151098780733}
-  m_LocalRotation: {x: 0, y: 0.9764281, z: 0, w: 0.21584316}
+  m_LocalRotation: {x: -0, y: 0.9764281, z: -0, w: 0.21584316}
   m_LocalPosition: {x: -11, y: 0, z: 10.83}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 318430151016383885}
   - {fileID: 318430152742035403}
@@ -324,6 +324,7 @@ MonoBehaviour:
   damageAmount: 0
   enemyUIManager: {fileID: 4185437721736090033}
   enemyUIManagerGO: {fileID: 3990564155582707186}
+  ragdollManager: {fileID: 0}
 --- !u!195 &318430151098780707
 NavMeshAgent:
   m_ObjectHideFlags: 0

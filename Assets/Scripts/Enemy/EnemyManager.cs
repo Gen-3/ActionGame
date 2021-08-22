@@ -22,6 +22,8 @@ public class EnemyManager : MonoBehaviour
     private float damageShowTime;
     //private float fixedsliderShowTime;
 
+    [SerializeField] RagdollManager ragdollManager;
+
     void Start()
     {
         target = GameObject.FindGameObjectWithTag ("Player").transform;
@@ -120,5 +122,6 @@ public class EnemyManager : MonoBehaviour
     {
         animator.enabled=false;
         enemyUIManagerGO.SetActive(false);
+//        ragdollManager.SetRagdoll(true);
     }
 }

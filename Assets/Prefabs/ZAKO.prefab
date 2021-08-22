@@ -807,6 +807,7 @@ GameObject:
   - component: {fileID: 7935508634931681146}
   - component: {fileID: 7935508634931681145}
   - component: {fileID: 7935508634931681144}
+  - component: {fileID: 2128927301104059490}
   m_Layer: 0
   m_Name: ZAKO
   m_TagString: Untagged
@@ -888,6 +889,7 @@ MonoBehaviour:
   damageAmount: 0
   enemyUIManager: {fileID: 4428376587069660398}
   enemyUIManagerGO: {fileID: 4548700495041974798}
+  ragdollManager: {fileID: 2128927301104059490}
 --- !u!195 &7935508634931681145
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -924,6 +926,18 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &2128927301104059490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7935508634931681151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09224c70026014ef980cbf813269536d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7935508634937099027
 GameObject:
   m_ObjectHideFlags: 0

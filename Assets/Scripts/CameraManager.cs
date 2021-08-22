@@ -74,10 +74,10 @@ public class CameraManager : MonoBehaviour
         {
             keyInputX -= 5f;
         }
-        if (Input.GetKey(KeyCode.U))
-        {
-            keyInputX *= 3f;
-        }
+        //if (Input.GetKey(KeyCode.U))
+        //{
+        //    keyInputX *= 3f;
+        //}
 
         transform.RotateAround(targetPos, Vector3.up, keyInputX * Time.deltaTime * camSpeed);
 

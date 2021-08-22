@@ -15,15 +15,17 @@ public class PlayerManager : MonoBehaviour
     public bool isSlow;
     public bool canAttack;
     public bool isKnockBuck;
+    public bool canCombo;
 
     //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     float inputHorizontal;
     float inputVertical;
 
     float moveSpeed = 3f;
-    const float defaultMoveSpeed = 3.0f;
+    [SerializeField] float defaultMoveSpeed = 3.0f;
     //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    public DamageSource damageSource;
     public float applySpeed;       // 回転の適用速度
 
 
@@ -43,22 +45,35 @@ public class PlayerManager : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(KeyCode.J))
+        if (Input.GetKey(KeyCode.J))//弱攻撃ボタン押下時
         {
             if (canAttack)
             {
-                animator.SetTrigger("attack");
+                animator.SetTrigger("attack1");
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKey(KeyCode.U))//強攻撃ボタン押下時
         {
-            Damage();
+            if (canAttack)
+            {
+                animator.SetTrigger("attack2");
+            }
+            if (!canAttack&&canCombo)
+            {
+                animator.SetTrigger("attack3");
+            }
+
         }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            KnockOut();
-        }
+
+        //if (Input.GetKeyDown(KeyCode.N))
+        //{
+        //    Damage();
+        //}
+        //if (Input.GetKeyDown(KeyCode.M))
+        //{
+        //    KnockOut();
+        //}
 
 
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

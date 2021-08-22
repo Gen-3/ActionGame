@@ -492,6 +492,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 318430151098780704, guid: 6d6231f61a0824c3f8538fe4ae456c1b, type: 3}
+      propertyPath: MaxHP
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 318430151098780711, guid: 6d6231f61a0824c3f8538fe4ae456c1b, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -982,6 +986,10 @@ PrefabInstance:
     - target: {fileID: 7935508634931680389, guid: ca50c24bd8a0a49288aa608cf266bfc9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935508634931681146, guid: ca50c24bd8a0a49288aa608cf266bfc9, type: 3}
+      propertyPath: MaxHP
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 7935508634931681151, guid: ca50c24bd8a0a49288aa608cf266bfc9, type: 3}
       propertyPath: m_Name
@@ -10941,9 +10949,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3902288762480959923, guid: 4293a7ea3069243c585a20689cac2cbb, type: 3}
-      propertyPath: m_TagString
-      value: Player
+    - target: {fileID: 3902288763115112176, guid: 4293a7ea3069243c585a20689cac2cbb, type: 3}
+      propertyPath: damageAmount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3902288763115112176, guid: 4293a7ea3069243c585a20689cac2cbb, type: 3}
+      propertyPath: defaultAttack
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4293a7ea3069243c585a20689cac2cbb, type: 3}
