@@ -6,11 +6,12 @@ public class CameraManager : MonoBehaviour
 {
     public GameObject playerObj;
     Vector3 previousPlayerPos;
-    public GameObject[] targetObjs = new GameObject[0];
+    public List<GameObject> targetObjList = new List<GameObject>();
     Vector3 previousTargetPos;
     public float camSpeed;
     public Vector3 initialCameraPos;
     public bool rockOn;
+    GameObject nearOne;
 
     void Start()
     {
@@ -25,10 +26,24 @@ public class CameraManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             rockOn = !rockOn;
-            targetObjs = GameObject.FindGameObjectsWithTag("Enemy");
-            Debug.Log($"敵の数は{targetObjs.Length}");
+            targetObjList.Clear();
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                targetObjList.Add(enemy);
+            }
+
+            Debug.Log($"敵の数は{targetObjList.Count}体。");
+            nearOne = targetObjList[0];
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                if (Vector3.Distance(playerObj.transform.position, nearOne.transform.position) > Vector3.Distance(playerObj.transform.position, enemy.transform.position))
+                {
+                    nearOne = enemy;
+                }
+            }
         }
-        if (!rockOn)
+
+        if (!rockOn)//非ロックオン時
         {
             MoveCamera();
 
@@ -44,11 +59,12 @@ public class CameraManager : MonoBehaviour
                 Start();
             }
         }
-        else
+        else//ロックオン時
         {
-            previousTargetPos = targetObjs[0].transform.position;
-            transform.position = playerObj.transform.position + (playerObj.transform.position - targetObjs[0].transform.position).normalized * initialCameraPos.magnitude + new Vector3(0,initialCameraPos.y,0);
-            transform.LookAt(targetObjs[0].transform.position);
+            previousTargetPos = nearOne.transform.position;
+            transform.position = playerObj.transform.position + (playerObj.transform.position - nearOne.transform.position).normalized * initialCameraPos.magnitude + new Vector3(0, initialCameraPos.y, 0);
+            transform.LookAt(nearOne.transform.position);
+            previousPlayerPos = playerObj.transform.position;
         }
     }
 
