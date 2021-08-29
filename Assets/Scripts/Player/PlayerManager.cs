@@ -145,7 +145,7 @@ public class PlayerManager : MonoBehaviour
             {
                 transform.rotation = Quaternion.Slerp(transform.rotation,
                                                       Quaternion.LookRotation(moveForward),
-                                                      applySpeed); ;
+                                                      applySpeed);
             }
         }
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

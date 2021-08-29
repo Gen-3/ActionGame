@@ -12,6 +12,7 @@ public class CameraManager : MonoBehaviour
     public Vector3 initialCameraPos;
     public bool rockOn;
     GameObject nearOne;
+    Quaternion initQuaternion;
 
     void Start()
     {
@@ -19,26 +20,33 @@ public class CameraManager : MonoBehaviour
         previousPlayerPos = playerObj.transform.position;
         transform.position = playerObj.transform.position + initialCameraPos;
         rockOn = false;
+        initQuaternion = transform.rotation;
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
-            rockOn = !rockOn;
             targetObjList.Clear();
             foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
             {
-                targetObjList.Add(enemy);
-            }
-
-            Debug.Log($"敵の数は{targetObjList.Count}体。");
-            nearOne = targetObjList[0];
-            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
-            {
-                if (Vector3.Distance(playerObj.transform.position, nearOne.transform.position) > Vector3.Distance(playerObj.transform.position, enemy.transform.position))
+                if (Vector3.Angle(playerObj.transform.position-Camera.main.transform.position, enemy.transform.position - playerObj.transform.position) < 60)
                 {
-                    nearOne = enemy;
+                    targetObjList.Add(enemy);
+                }
+            }
+            Debug.Log($"敵の数は{targetObjList.Count}体。");
+            if (targetObjList.Count != 0)
+            {
+                rockOn = !rockOn;
+
+                nearOne = targetObjList[0];
+                foreach (GameObject enemy in targetObjList)
+                {
+                    if (Vector3.Distance(playerObj.transform.position, nearOne.transform.position) > Vector3.Distance(playerObj.transform.position, enemy.transform.position))
+                    {
+                        nearOne = enemy;
+                    }
                 }
             }
         }
@@ -49,10 +57,7 @@ public class CameraManager : MonoBehaviour
 
             RotateCameraByKeyboard();
 
-            if (Input.GetMouseButton(1))// マウスの右クリックを押している間
-            {
-                RotateCameraByMouse();
-            }
+            ResetCameraAngle();
 
             if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftShift))//デバッグ用コマンド　カメラの初期位置調整用
             {
@@ -61,30 +66,27 @@ public class CameraManager : MonoBehaviour
         }
         else//ロックオン時
         {
-            previousTargetPos = nearOne.transform.position;
-            transform.position = playerObj.transform.position + (playerObj.transform.position - nearOne.transform.position).normalized * initialCameraPos.magnitude + new Vector3(0, initialCameraPos.y, 0);
-            transform.LookAt(nearOne.transform.position);
-            previousPlayerPos = playerObj.transform.position;
+            if (nearOne.tag != "Enemy")
+            {
+                rockOn = false;
+            }
+            else
+            {
+                previousTargetPos = nearOne.transform.position;
+                Vector3 cameraMoveTo = playerObj.transform.position + (new Vector3((playerObj.transform.position - nearOne.transform.position).normalized.x, 0, (playerObj.transform.position - nearOne.transform.position).normalized.z) * 10) + new Vector3(0, initialCameraPos.y, 0);
+                transform.position = Vector3.Slerp(transform.position, cameraMoveTo, 0.2f);
+                previousPlayerPos = playerObj.transform.position;
+                transform.LookAt(nearOne.transform.position);
+            }
         }
     }
 
-    void MoveCamera()// targetの移動量分、自分（カメラ）も移動する
+    void MoveCamera()// playerの移動量分、自分（カメラ）も移動する
     {
-        transform.position += playerObj.transform.position - previousPlayerPos;
+        transform.position += playerObj.transform.position - previousPlayerPos;//ここ、ロックオン時にも解除時にもなめらかに移行するようにできないか
         previousPlayerPos = playerObj.transform.position;
-    }
-
-    void RotateCameraByMouse()
-    {
-        // マウスの移動量
-        float mouseInputX = Input.GetAxis("Mouse X");
-        //float mouseInputY = Input.GetAxis("Mouse Y");
-        // targetの位置のY軸を中心に、回転（公転）する
-        transform.RotateAround(previousPlayerPos, Vector3.up, mouseInputX * Time.deltaTime * camSpeed);
-        // カメラの垂直移動（※角度制限なし、必要が無ければコメントアウト）
-        //transform.RotateAround(targetPos, transform.right, mouseInputY * Time.deltaTime * 200f);
-
-
+//        transform.rotation = Quaternion.Slerp(transform.rotation, new Quaternion(10/180f,transform.rotation.y, transform.rotation.z, transform.rotation.w), 0.2f);
+//どんどん斜めになっていく。地面に対して一定の角度を目指して徐々に位置を修正したい。
     }
 
     void RotateCameraByKeyboard()
@@ -94,11 +96,11 @@ public class CameraManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.K))
         {
-            keyInputX += 1f;
+            keyInputX += 2f;
         }
         if (Input.GetKey(KeyCode.H))
         {
-            keyInputX -= 1f;
+            keyInputX -= 2f;
         }
 
         if (Input.GetKey(KeyCode.I))
@@ -115,6 +117,15 @@ public class CameraManager : MonoBehaviour
         //}
 
         transform.RotateAround(previousPlayerPos, Vector3.up, keyInputX * Time.deltaTime * camSpeed);
-
     }
+
+    void ResetCameraAngle()
+    {
+        Quaternion previousRotation = this.transform.localRotation;
+        Vector3 rotationAngles = previousRotation.eulerAngles;
+        rotationAngles.x = 10f;
+        Quaternion rotation = Quaternion.Euler(rotationAngles);
+        this.transform.localRotation = Quaternion.Slerp(previousRotation, rotation, 0.2f);
+    }
+
 }

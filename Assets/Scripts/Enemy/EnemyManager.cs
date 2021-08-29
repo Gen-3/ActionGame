@@ -45,7 +45,14 @@ public class EnemyManager : MonoBehaviour
     void Update()
     {
         agent.destination = target.position;
-        animator.SetFloat("Distance",agent. remainingDistance);
+        if (!float.IsInfinity(agent.remainingDistance))
+        {
+            animator.SetFloat("Distance", agent.remainingDistance);//ここを(!float.IsInfiniry(agent.remainingDistance))で処理する
+        }
+        else
+        {
+            animator.SetFloat("Distance", Vector3.Distance(target.position, transform.position));
+        }
 
         if (damageShowTime > 0)
         {
@@ -114,6 +121,8 @@ public class EnemyManager : MonoBehaviour
             {
                 animator.GetComponent<NavMeshAgent>().speed = 0;
                 animator.SetTrigger("knockOut");
+                animator.tag = "Untagged";
+
             }
         }
     }
