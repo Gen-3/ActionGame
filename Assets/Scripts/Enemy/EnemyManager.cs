@@ -57,7 +57,6 @@ public class EnemyManager : MonoBehaviour
         if (damageShowTime > 0)
         {
             damageShowTime -= 1;
-            Debug.Log(damageShowTime);
         }
         if (damageShowTime == 0)
         {
@@ -122,6 +121,7 @@ public class EnemyManager : MonoBehaviour
                 animator.GetComponent<NavMeshAgent>().speed = 0;
                 animator.SetTrigger("knockOut");
                 animator.tag = "Untagged";
+                enemyUIManager.rockOnMarker.enabled = false;
 
             }
         }

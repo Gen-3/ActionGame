@@ -13,6 +13,7 @@ public class CameraManager : MonoBehaviour
     public bool rockOn;
     GameObject nearOne;
     Quaternion initQuaternion;
+    GameObject rockOnObject;
 
     void Start()
     {
@@ -25,14 +26,17 @@ public class CameraManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L))//ロックオンボタン押下時
         {
             targetObjList.Clear();
             foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
             {
-                if (Vector3.Angle(playerObj.transform.position-Camera.main.transform.position, enemy.transform.position - playerObj.transform.position) < 60)
+                int i = 1;
+                if (Vector3.Angle(playerObj.transform.position - Camera.main.transform.position, enemy.transform.position - playerObj.transform.position) < 60 && (playerObj.transform.position - enemy.transform.position).magnitude < 20)
                 {
+                    i++;
                     targetObjList.Add(enemy);
+                    Debug.Log($"ロックオン候補{i}は距離{(playerObj.transform.position - enemy.transform.position).magnitude}");
                 }
             }
             Debug.Log($"敵の数は{targetObjList.Count}体。");
@@ -51,8 +55,14 @@ public class CameraManager : MonoBehaviour
             }
         }
 
+
         if (!rockOn)//非ロックオン時
         {
+            if (rockOnObject != null)
+            {
+                rockOnObject.GetComponentInChildren<EnemyUIManager>().rockOnMarker.enabled = false;
+            }
+
             MoveCamera();
 
             RotateCameraByKeyboard();
@@ -66,17 +76,26 @@ public class CameraManager : MonoBehaviour
         }
         else//ロックオン時
         {
-            if (nearOne.tag != "Enemy")
+            if (nearOne.tag != "Enemy")//敵撃破時、TagをEnemy以外に変更することで、ロックオンを自動的に外す
             {
                 rockOn = false;
+                rockOnObject = null;
             }
             else
             {
+                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position=nearOne.transform.position+(Camera.main.transform.position-nearOne.transform.position).normalized+new Vector3(0,1,0);
+                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.enabled = true;
+
+                rockOnObject = nearOne;
+
+
                 previousTargetPos = nearOne.transform.position;
                 Vector3 cameraMoveTo = playerObj.transform.position + (new Vector3((playerObj.transform.position - nearOne.transform.position).normalized.x, 0, (playerObj.transform.position - nearOne.transform.position).normalized.z) * 10) + new Vector3(0, initialCameraPos.y, 0);
                 transform.position = Vector3.Slerp(transform.position, cameraMoveTo, 0.2f);
                 previousPlayerPos = playerObj.transform.position;
                 transform.LookAt(nearOne.transform.position);
+
+
             }
         }
     }

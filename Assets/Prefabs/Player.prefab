@@ -904,7 +904,7 @@ MonoBehaviour:
   canAttack: 0
   isKnockBuck: 0
   canCombo: 0
-  defaultMoveSpeed: 3
+  defaultMoveSpeed: 6
   damageSource: {fileID: 3902288763115112176}
   applySpeed: 0.1
 --- !u!136 &3902288762480959924
@@ -1275,8 +1275,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9668f8a0806494e93a5758a208dfae54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 5
-  defaultAttack: 0
+  damageAmount: 0
+  defaultAttack: 100
 --- !u!1 &3902288763124066828
 GameObject:
   m_ObjectHideFlags: 0

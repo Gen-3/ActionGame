@@ -8,6 +8,7 @@ public class EnemyUIManager : MonoBehaviour
 {
     public Slider hpSlider;
     public TextMesh damageText;
+    public Image rockOnMarker;
 
     private void Update()
     {
