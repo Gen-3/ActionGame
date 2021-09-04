@@ -122,6 +122,8 @@ public class EnemyManager : MonoBehaviour
 
             if (HP <= 0)//ノックアウト処理
             {
+                soundManager.PlaySoundEffect(6);
+                Debug.Log("aaaaaaaaaaaaaaaa");
                 animator.GetComponent<NavMeshAgent>().speed = 0;
                 animator.SetTrigger("knockOut");
                 animator.tag = "Untagged";

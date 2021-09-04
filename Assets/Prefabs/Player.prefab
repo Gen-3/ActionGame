@@ -1071,6 +1071,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a9fe83366307d414ea5aec26a348f3ea, type: 3}
   - {fileID: 8300000, guid: 7053294e066eb1945baa4d9cc9194f15, type: 3}
   - {fileID: 8300000, guid: 13182107f288fdc47a11f9216c8f062b, type: 3}
+  - {fileID: 8300000, guid: 13d3f1c072e36fb4cbfcbed9cfe07750, type: 3}
   audioSources: {fileID: 1249129288}
 --- !u!1 &3902288762726486803
 GameObject:

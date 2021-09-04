@@ -209,6 +209,7 @@ public class PlayerManager : MonoBehaviour
             if (HP <= 0)//ノックアウト処理
             {
                 Debug.Log("プレイヤーのHPが０以下になりました/ノックアウト処理");
+                soundManager.PlaySoundEffect(8);
                 knockOut = true;
                 animator.SetTrigger("knockOut");
                 GetComponent<CapsuleCollider>().enabled = false;
