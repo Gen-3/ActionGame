@@ -21,7 +21,7 @@ public class SoundManager : MonoBehaviour
     public void PlaySoundEffect(int id)
     {
         audioSources.PlayOneShot(audioClips[id]);
-        Debug.Log($"効果音{id}を鳴らしました");
+//        Debug.Log($"効果音{id}を鳴らしました");
 
         //switch (id)
         //{

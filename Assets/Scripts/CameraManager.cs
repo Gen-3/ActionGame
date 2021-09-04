@@ -36,10 +36,10 @@ public class CameraManager : MonoBehaviour
                 {
                     i++;
                     targetObjList.Add(enemy);
-                    Debug.Log($"ロックオン候補{i}は距離{(playerObj.transform.position - enemy.transform.position).magnitude}");
+//                    Debug.Log($"ロックオン候補{i}は距離{(playerObj.transform.position - enemy.transform.position).magnitude}");
                 }
             }
-            Debug.Log($"敵の数は{targetObjList.Count}体。");
+  //          Debug.Log($"敵の数は{targetObjList.Count}体。");
             if (targetObjList.Count != 0)
             {
                 rockOn = !rockOn;

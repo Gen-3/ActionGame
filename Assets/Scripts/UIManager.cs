@@ -8,6 +8,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHP(float sliderValue)
     {
-        Debug.Log(sliderValue);
+//        Debug.Log(sliderValue);
     }
 }

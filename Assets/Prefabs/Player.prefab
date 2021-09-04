@@ -871,6 +871,7 @@ MonoBehaviour:
   canAttack: 0
   isKnockBuck: 0
   canCombo: 0
+  knockOut: 0
   WeaponObject: {fileID: 3902288763115112190}
   soundManager: {fileID: 1249129287}
   defaultMoveSpeed: 6

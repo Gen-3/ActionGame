@@ -59,7 +59,10 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
-        if (knockOut) { return; }
+        if (knockOut)
+        {
+            return;
+        }
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
 
@@ -145,6 +148,7 @@ public class PlayerManager : MonoBehaviour
 
     void InputDirectionConvertor()
     {
+        if (knockOut) { return; }
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
