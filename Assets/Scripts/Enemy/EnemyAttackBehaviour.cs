@@ -9,6 +9,7 @@ public class EnemyAttackBehaviour : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.GetComponent<NavMeshAgent>().speed = 0;
+        animator.GetComponent<EnemyManager>().attackID = 3;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -18,12 +19,13 @@ public class EnemyAttackBehaviour : StateMachineBehaviour
         animator.GetComponent<Transform>().rotation = Quaternion.Slerp(animator.GetComponent<Transform>().rotation,
                                       Quaternion.LookRotation(animator.GetComponent<EnemyManager>().target.transform.position- animator.GetComponent<EnemyManager>().transform.position),
                                       animator.GetComponent<EnemyManager>().applySpeed); ;
-
+        animator.GetComponent<EnemyManager>().attackID = 3;
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.GetComponent<EnemyManager>().attackID = 0;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

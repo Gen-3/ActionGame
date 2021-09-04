@@ -24,6 +24,9 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] RagdollManager ragdollManager;
 
+    public SoundManager soundManager;
+    public int attackID;//攻撃音を鳴らすために必要
+
     void Start()
     {
         target = GameObject.FindGameObjectWithTag ("Player").transform;
@@ -38,7 +41,6 @@ public class EnemyManager : MonoBehaviour
         float sliderValue = HP / MaxHP;
         enemyUIManager.UpdateHP(sliderValue);
         enemyUIManager.damageText.text = "";
-
     }
 
     // Update is called once per frame
@@ -103,6 +105,8 @@ public class EnemyManager : MonoBehaviour
         DamageSource damageSource = other.GetComponent<DamageSource>();
         if (damageSource != null)//もしぶつかった相手がDamageSourceを持っていたら
         {
+            damageSource.userplayer.soundManager.PlaySoundEffect(damageSource.userplayer.attackID);
+
             animator.SetTrigger("hitDamage");//
 
             damageShowTime = 50f;

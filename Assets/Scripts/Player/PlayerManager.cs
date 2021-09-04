@@ -16,6 +16,10 @@ public class PlayerManager : MonoBehaviour
     public bool canAttack;
     public bool isKnockBuck;
     public bool canCombo;
+    public bool knockOut;
+
+    public GameObject WeaponObject;//使ってない
+    public SoundManager soundManager;
 
     //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     float inputHorizontal;
@@ -28,20 +32,34 @@ public class PlayerManager : MonoBehaviour
     public DamageSource damageSource;
     public float applySpeed;       // 回転の適用速度
 
+    public int attackID;
+
+    public float HP;
+    public float MaxHP;
+    public float atk;
+    public float damageAmount;
+    public UIManager uiManager;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-//        weaponCollider = GetComponentInChildren<CapsuleCollider>();
+        //        weaponCollider = GetComponentInChildren<CapsuleCollider>();
         DisableWeaponCollider();
         isSlow = false;
         canAttack = true;
+        knockOut = false;
         moveSpeed = defaultMoveSpeed;
+
+        HP = MaxHP;
+        float sliderValue = HP / MaxHP;
+        uiManager.UpdateHP(sliderValue);
+
     }
 
     void Update()
     {
+        if (knockOut) { return; }
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
 
@@ -59,11 +77,10 @@ public class PlayerManager : MonoBehaviour
             {
                 animator.SetTrigger("attack2");
             }
-            if (!canAttack&&canCombo)
+            if (!canAttack && canCombo)
             {
                 animator.SetTrigger("attack3");
             }
-
         }
 
         //if (Input.GetKeyDown(KeyCode.N))
@@ -175,7 +192,30 @@ public class PlayerManager : MonoBehaviour
         DamageSource damageSource = other.GetComponent<DamageSource>();
         if (damageSource != null)//もしぶつかった相手がDamageSourceを持っていたら
         {
+            damageSource.userEnemy.soundManager.PlaySoundEffect(damageSource.userEnemy.attackID);
+
             animator.SetTrigger("hitDamage");
+
+            damageAmount = damageSource.damageAmount;//データ上のHPを減らす
+            HP -= damageAmount;
+            float sliderValue = HP / MaxHP;
+            Debug.Log($"プレイヤーのHPは{HP}");
+            uiManager.UpdateHP(sliderValue);
+
+            if (HP <= 0)//ノックアウト処理
+            {
+                Debug.Log("プレイヤーのHPが０以下になりました/ノックアウト処理");
+                knockOut = true;
+                animator.SetTrigger("knockOut");
+                GetComponent<CapsuleCollider>().enabled = false;
+                GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                foreach(GameObject enemy in enemies)
+                {
+                    enemy.GetComponent<Animator>().SetBool("standby", true);
+                }
+            }
         }
     }
+
+
 }

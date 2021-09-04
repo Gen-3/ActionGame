@@ -7,7 +7,7 @@ public class EnemyKnockOutBehaviour : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log("EnemyKnockOutBehaviourのOnStateEnterでユニットのカプセルコライダーを切りました");
+//        Debug.Log("EnemyKnockOutBehaviourのOnStateEnterでユニットのカプセルコライダーを切りました");
         animator.GetComponent<CapsuleCollider>().enabled = false;
     }
 

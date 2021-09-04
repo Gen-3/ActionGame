@@ -11,13 +11,15 @@ public class PlayerAttack2Behaviour : StateMachineBehaviour
         animator.GetComponent<PlayerManager>().canAttack = false;
         animator.GetComponent<PlayerManager>().canCombo = true;
         animator.GetComponent<PlayerManager>().damageSource.damageAmount = animator.GetComponent<PlayerManager>().damageSource.defaultAttack * 1.5f;
+        animator.GetComponent<PlayerManager>().attackID = 2;
+
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //
-    //}
+    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        animator.GetComponent<PlayerManager>().attackID = 2;
+    }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -26,6 +28,8 @@ public class PlayerAttack2Behaviour : StateMachineBehaviour
         animator.GetComponent<PlayerManager>().canAttack = true;
         animator.GetComponent<PlayerManager>().canCombo = false;
         animator.GetComponent<PlayerManager>().damageSource.damageAmount = animator.GetComponent<PlayerManager>().damageSource.defaultAttack * 1f;
+        animator.GetComponent<PlayerManager>().attackID = 0;
+        animator.ResetTrigger("attack3");
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
