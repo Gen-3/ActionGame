@@ -18,7 +18,7 @@ public class EnemyAttackBehaviour : StateMachineBehaviour
         animator.ResetTrigger("hitDamage");
         animator.GetComponent<Transform>().rotation = Quaternion.Slerp(animator.GetComponent<Transform>().rotation,
                                       Quaternion.LookRotation(animator.GetComponent<EnemyManager>().target.transform.position- animator.GetComponent<EnemyManager>().transform.position),
-                                      animator.GetComponent<EnemyManager>().applySpeed); ;
+                                      animator.GetComponent<EnemyManager>().rotateSpeed); ;
         animator.GetComponent<EnemyManager>().attackID = 3;
     }
 

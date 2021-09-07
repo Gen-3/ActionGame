@@ -14,6 +14,7 @@ public class CameraManager : MonoBehaviour
     GameObject nearOne;
     Quaternion initQuaternion;
     GameObject rockOnObject;
+    [SerializeField] float rockOnMarkerSize; 
 
     void Start()
     {
@@ -83,7 +84,12 @@ public class CameraManager : MonoBehaviour
             }
             else
             {
-                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position=nearOne.transform.position+(Camera.main.transform.position-nearOne.transform.position).normalized+new Vector3(0,1,0);
+                //ロックオンマーカーの位置を敵の中心からカメラ方向に少し進めた所にし、距離に応じて大きさを調整して見かけの大きさが一定になるようにする
+                Vector3 centerOfnearOne = nearOne.transform.position + new Vector3(0,nearOne.transform.localScale.magnitude/2,0);
+                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position = centerOfnearOne + (Camera.main.transform.position - centerOfnearOne).normalized * nearOne.transform.localScale.magnitude;
+                float distance = Vector3.Distance(Camera.main.transform.position, nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position);
+                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.localScale = Vector3.one * distance * rockOnMarkerSize / 100;
+                    
                 nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.enabled = true;
 
                 rockOnObject = nearOne;

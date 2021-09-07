@@ -9,7 +9,8 @@ public class EnemyManager : MonoBehaviour
     public Transform target;
     Animator animator;
     public Collider weaponCollider;
-    public float applySpeed;       // 回転の適用速度
+    public float rotateSpeed;       // 回転の適用速度
+    public float defaultMoveSpeed;
 
     public float HP;
     public float MaxHP;
@@ -34,7 +35,7 @@ public class EnemyManager : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 //        weaponCollider = GetComponentInChildren<CapsuleCollider>();
         DisableWeaponCollider();
-        applySpeed = 0.1f;
+        rotateSpeed = 0.1f;
 
         enemyUIManagerGO.SetActive(true);
         HP = MaxHP;
@@ -106,6 +107,7 @@ public class EnemyManager : MonoBehaviour
         if (damageSource != null)//もしぶつかった相手がDamageSourceを持っていたら
         {
             damageSource.userplayer.soundManager.PlaySoundEffect(damageSource.userplayer.attackID);
+            Debug.Log(damageSource.userplayer.attackID);
 
             animator.SetTrigger("hitDamage");//
 
@@ -122,13 +124,12 @@ public class EnemyManager : MonoBehaviour
 
             if (HP <= 0)//ノックアウト処理
             {
-                soundManager.PlaySoundEffect(6);
-                Debug.Log("aaaaaaaaaaaaaaaa");
+//                soundManager.PlaySoundEffect(6);くらいSEはアニメーターからに統一
                 animator.GetComponent<NavMeshAgent>().speed = 0;
                 animator.SetTrigger("knockOut");
                 animator.tag = "Untagged";
                 enemyUIManager.rockOnMarker.enabled = false;
-
+                DisableWeaponCollider();
             }
         }
     }

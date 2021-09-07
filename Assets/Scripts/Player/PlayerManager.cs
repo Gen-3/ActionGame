@@ -196,8 +196,8 @@ public class PlayerManager : MonoBehaviour
         DamageSource damageSource = other.GetComponent<DamageSource>();
         if (damageSource != null)//もしぶつかった相手がDamageSourceを持っていたら
         {
-            damageSource.userEnemy.soundManager.PlaySoundEffect(damageSource.userEnemy.attackID);
-
+//            damageSource.userEnemy.soundManager.PlaySoundEffect(damageSource.userEnemy.attackID);
+//            Debug.Log($"PlayerManagerのOnTriggerEnterでPlaySoundEffectが呼ばれた");
             animator.SetTrigger("hitDamage");
 
             damageAmount = damageSource.damageAmount;//データ上のHPを減らす
@@ -209,7 +209,7 @@ public class PlayerManager : MonoBehaviour
             if (HP <= 0)//ノックアウト処理
             {
                 Debug.Log("プレイヤーのHPが０以下になりました/ノックアウト処理");
-                soundManager.PlaySoundEffect(8);
+//                soundManager.PlaySoundEffect(8);//アニメーターから音を出す？
                 knockOut = true;
                 animator.SetTrigger("knockOut");
                 GetComponent<CapsuleCollider>().enabled = false;
