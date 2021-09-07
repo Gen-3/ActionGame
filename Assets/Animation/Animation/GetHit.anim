@@ -49149,7 +49149,7 @@ AnimationClip:
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
-    intParameter: 9
+    intParameter: 6
     messageOptions: 0
   - time: 0
     functionName: PlaySoundEffect
