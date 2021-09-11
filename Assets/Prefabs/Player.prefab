@@ -872,9 +872,10 @@ MonoBehaviour:
   isKnockBuck: 0
   canCombo: 0
   knockOut: 0
+  isRolling: 0
   WeaponObject: {fileID: 3902288763115112190}
   soundManager: {fileID: 1249129287}
-  defaultMoveSpeed: 6
+  defaultMoveSpeed: 3
   damageSource: {fileID: 3902288763115112176}
   applySpeed: 0.3
   attackID: 0
@@ -883,6 +884,8 @@ MonoBehaviour:
   atk: 0
   damageAmount: 0
   uiManager: {fileID: 0}
+  cameraManager: {fileID: 0}
+  rollingForward: {x: 0, y: 0, z: 0}
 --- !u!95 &3902288762480959881
 Animator:
   serializedVersion: 3
@@ -917,7 +920,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!136 &3902288762480959924
 CapsuleCollider:
   m_ObjectHideFlags: 0

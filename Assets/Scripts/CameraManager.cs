@@ -89,7 +89,8 @@ public class CameraManager : MonoBehaviour
             {
                 //ロックオンマーカーの位置を敵の中心からカメラ方向に少し進めた所にし、距離に応じて大きさを調整して見かけの大きさが一定になるようにする
                 Vector3 centerOfnearOne = nearOne.transform.position + new Vector3(0,nearOne.transform.localScale.magnitude/2,0);
-                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position = centerOfnearOne + (Camera.main.transform.position - centerOfnearOne).normalized * nearOne.transform.localScale.magnitude;
+//                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position = centerOfnearOne + (Camera.main.transform.position - centerOfnearOne).normalized * nearOne.transform.localScale.magnitude;
+                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position = centerOfnearOne;
                 float distance = Vector3.Distance(Camera.main.transform.position, nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position);
                 nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.localScale = Vector3.one * distance * rockOnMarkerSize / 100;
                     
@@ -100,7 +101,7 @@ public class CameraManager : MonoBehaviour
 
                 previousTargetPos = nearOne.transform.position;
                 Vector3 cameraMoveTo = playerObj.transform.position + (new Vector3((playerObj.transform.position - nearOne.transform.position).normalized.x, 0, (playerObj.transform.position - nearOne.transform.position).normalized.z) * 10) + new Vector3(0, initialCameraPos.y, 0);
-                transform.position = Vector3.Slerp(transform.position, cameraMoveTo, 0.2f);
+                                transform.position = Vector3.Slerp(transform.position, cameraMoveTo, 0.2f);
                 previousPlayerPos = playerObj.transform.position;
                 transform.LookAt(nearOne.transform.position);
 
