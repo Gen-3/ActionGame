@@ -66,19 +66,19 @@ public class PlayerManager : MonoBehaviour
 
     void Update()
     {
-
-//        animator.GetCurrentAnimatorStateInfo()
-        
-        if (knockOut){return;}//ノックダウン時は入力を受付ない
-
+        if (knockOut)
+        {
+            return;
+        }
         if (isRolling)//ローリング継続時
         {
             rollingCount -= 1;
+            Debug.Log(rb.velocity.magnitude);
             if (rollingCount < 0)
             {
                 isRolling = false;
             }
-//            return;//不要？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？
+            return;
         }
 
         x = Input.GetAxisRaw("Horizontal");
@@ -86,12 +86,22 @@ public class PlayerManager : MonoBehaviour
 
         if (Input.GetKey(KeyCode.I))//弱攻撃ボタン押下時
         {
-            Attack1();
+            if (canAttack)
+            {
+                animator.SetTrigger("attack1");
+            }
         }
 
         if (Input.GetKey(KeyCode.O))//強攻撃ボタン押下時
         {
-            Attack2();
+            if (canAttack)
+            {
+                animator.SetTrigger("attack2");
+            }
+            if (!canAttack && canCombo)
+            {
+                animator.SetTrigger("attack3");
+            }
         }
 
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,12 +109,12 @@ public class PlayerManager : MonoBehaviour
         inputVertical = Input.GetAxisRaw("Vertical");
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        if (Input.GetKeyDown(KeyCode.K)) 
+        if (Input.GetKeyDown(KeyCode.K))
         {
             if (x != 0 || z != 0)//入力があるとき、入力方向にローリング
             {
                 isRolling = true;
-                animator.SetTrigger("rolling");
+                animator.SetTrigger("isRolling");
                 rollingForward = transform.forward;
                 rollingCount = 8;
             }
@@ -112,49 +122,7 @@ public class PlayerManager : MonoBehaviour
             {
                 Debug.Log("移動入力ニュートラル時にローリングボタン押下でパリイを実装予定");
             }
-        }
-        //以下の部分はFixedUpdate()から移植しようとしている部分。なぜかここに持ってくると動かなくなる。
-        /////////////////////////////////////////////////////////////////////////////////////////
-        //if (!isSlow)
-        //{
-        //    if (x != 0 || z != 0)//入力があるときはisMovingをtrueにして動かす
-        //    {
-        //        moveSpeed = defaultMoveSpeed;
-        //        animator.SetBool("isMoving", true);
 
-        //        InputDirectionConvertor();
-        //    }
-        //    else//入力がないときはisMovingをfalseにする
-        //    {
-        //        animator.SetBool("isMoving", false);
-        //    }
-        //}
-        //else//isSlow時
-        //{
-        //    animator.SetBool("isMoving", false);
-        //    moveSpeed = defaultMoveSpeed / 6;
-
-        //    InputDirectionConvertor();
-        //}
-        /////////////////////////////////////////////////////////////////////////////////////////
-    }
-
-    void Attack1()
-    {
-        if (canAttack)
-        {
-            animator.SetTrigger("attack1");
-        }
-    }
-    void Attack2()
-    {
-        if (canAttack)
-        {
-            animator.SetTrigger("attack2");
-        }
-        if (!canAttack && canCombo)
-        {
-            animator.SetTrigger("attack3");
         }
     }
 
@@ -214,12 +182,13 @@ public class PlayerManager : MonoBehaviour
         }
         else//ローリング中ならスピードアップ
         {
-            rb.velocity = moveForward * moveSpeed * 3f + new Vector3(0, rb.velocity.y, 0);
+            rb.velocity = moveForward * moveSpeed * 1.5f + new Vector3(0, rb.velocity.y, 0);
         }
+
 
         //ロックオン解除時
         if (!cameraManager.rockOn)
-            // 入力があればキャラクターの向きを進行方向に
+            // キャラクターの向きを進行方向に
             if (moveForward != Vector3.zero)
             {
                 if (!isKnockBuck)
@@ -229,15 +198,22 @@ public class PlayerManager : MonoBehaviour
                                                           applySpeed);
                 }
             }
-            else { }
-        else        //ロックオン時、ノックバックしていない限り敵の方を向く
-        {
-            if (!isKnockBuck)
+            else
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation,
-                                                      Quaternion.LookRotation(cameraManager.nearOne.transform.position - transform.position),
-                                                      applySpeed);
             }
+        //ロックオン時、常に敵の方を向く
+        else
+        {
+            if (moveForward != Vector3.zero)
+            {
+                if (!isKnockBuck)
+                {
+                    transform.rotation = Quaternion.Slerp(transform.rotation,
+                                                          Quaternion.LookRotation(cameraManager.nearOne.transform.position-transform.position),
+                                                          applySpeed);
+                }
+            }
+
         }
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }

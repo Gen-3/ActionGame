@@ -17,7 +17,7 @@ public class EnemyUIManager : MonoBehaviour
 
     public void UpdateHP(float value)
     {
-        hpSlider.DOValue(value,0.5f);
+        hpSlider.DOValue(value,0.3f);
     }
 
     public void UpdateDamageText(float damageAmount)
