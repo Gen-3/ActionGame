@@ -17,6 +17,8 @@ public class PlayerManager : MonoBehaviour
     public bool isKnockBuck;
     public bool canCombo;
     public bool knockOut;
+    public bool isRolling;
+    int rollingCount;
 
     public GameObject WeaponObject;//使ってない
     public SoundManager soundManager;
@@ -39,6 +41,11 @@ public class PlayerManager : MonoBehaviour
     public float atk;
     public float damageAmount;
     public UIManager uiManager;
+
+    [SerializeField] CameraManager cameraManager=default;
+
+    public Vector3 rollingForward;
+    Vector3 moveForward;
 
     void Start()
     {
@@ -63,10 +70,21 @@ public class PlayerManager : MonoBehaviour
         {
             return;
         }
+        if (isRolling)//ローリング継続時
+        {
+            rollingCount -= 1;
+            Debug.Log(rb.velocity.magnitude);
+            if (rollingCount < 0)
+            {
+                isRolling = false;
+            }
+            return;
+        }
+
         x = Input.GetAxisRaw("Horizontal");
         z = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(KeyCode.J))//弱攻撃ボタン押下時
+        if (Input.GetKey(KeyCode.I))//弱攻撃ボタン押下時
         {
             if (canAttack)
             {
@@ -74,7 +92,7 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.U))//強攻撃ボタン押下時
+        if (Input.GetKey(KeyCode.O))//強攻撃ボタン押下時
         {
             if (canAttack)
             {
@@ -86,20 +104,26 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
-        //if (Input.GetKeyDown(KeyCode.N))
-        //{
-        //    Damage();
-        //}
-        //if (Input.GetKeyDown(KeyCode.M))
-        //{
-        //    KnockOut();
-        //}
-
-
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         inputHorizontal = Input.GetAxisRaw("Horizontal");
         inputVertical = Input.GetAxisRaw("Vertical");
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (x != 0 || z != 0)//入力があるとき、入力方向にローリング
+            {
+                isRolling = true;
+                animator.SetTrigger("isRolling");
+                rollingForward = transform.forward;
+                rollingCount = 8;
+            }
+            else//入力がないとき、パリイ？
+            {
+                Debug.Log("移動入力ニュートラル時にローリングボタン押下でパリイを実装予定");
+            }
+
+        }
     }
 
     public void Damage()
@@ -114,15 +138,7 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                Vector3 direction = transform.position + new Vector3(x, 0, z) * speedCoefficient;
-                transform.LookAt(direction);
-
-                rb.velocity = new Vector3(x, 0, z) * speedCoefficient;
-                animator.SetFloat("MoveSpeed", rb.velocity.magnitude);
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        */
-
+        if (knockOut) { return; }//ノックアウト時は入力を無視
         if (!isSlow)
         {
             if (x != 0 || z != 0)//入力があるときはisMovingをtrueにして動かす
@@ -146,28 +162,58 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void InputDirectionConvertor()
+    void InputDirectionConvertor()//
     {
-        if (knockOut) { return; }
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
-        // 方向キーの入力値とカメラの向きから、移動方向を決定
-        Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
+        if (!isRolling)
+        {
+            // 方向キーの入力値とカメラの向きから、移動方向を決定
+            moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
+        }
 
         // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-        rb.velocity = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
 
-        // キャラクターの向きを進行方向に
-        if (moveForward != Vector3.zero)
+        if (!isRolling)
         {
-            if (!isKnockBuck)
+            rb.velocity = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+        }
+        else//ローリング中ならスピードアップ
+        {
+            rb.velocity = moveForward * moveSpeed * 1.5f + new Vector3(0, rb.velocity.y, 0);
+        }
+
+
+        //ロックオン解除時
+        if (!cameraManager.rockOn)
+            // キャラクターの向きを進行方向に
+            if (moveForward != Vector3.zero)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation,
-                                                      Quaternion.LookRotation(moveForward),
-                                                      applySpeed);
+                if (!isKnockBuck)
+                {
+                    transform.rotation = Quaternion.Slerp(transform.rotation,
+                                                          Quaternion.LookRotation(moveForward),
+                                                          applySpeed);
+                }
             }
+            else
+            {
+            }
+        //ロックオン時、常に敵の方を向く
+        else
+        {
+            if (moveForward != Vector3.zero)
+            {
+                if (!isKnockBuck)
+                {
+                    transform.rotation = Quaternion.Slerp(transform.rotation,
+                                                          Quaternion.LookRotation(cameraManager.nearOne.transform.position-transform.position),
+                                                          applySpeed);
+                }
+            }
+
         }
         //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     }

@@ -7085,6 +7085,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9575048, guid: 80afb8f52d27bae4f8ff4cf083945861, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: d021512d6de402148a36d287d6cde611, type: 3}
     - target: {fileID: 220673135, guid: 80afb8f52d27bae4f8ff4cf083945861, type: 3}
       propertyPath: audioClips.Array.size
       value: 8
@@ -10805,6 +10809,7 @@ MonoBehaviour:
   camSpeed: 30
   initialCameraPos: {x: 0, y: 5.5, z: -10}
   rockOn: 0
+  nearOne: {fileID: 0}
   rockOnMarkerSize: 5
 --- !u!1001 &1217837755
 PrefabInstance:
@@ -11172,6 +11177,10 @@ PrefabInstance:
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 1542910727}
+    - target: {fileID: 3902288762480959927, guid: 4293a7ea3069243c585a20689cac2cbb, type: 3}
+      propertyPath: cameraManager
+      value: 
+      objectReference: {fileID: 1180620754}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4293a7ea3069243c585a20689cac2cbb, type: 3}
 --- !u!1001 &1361727617

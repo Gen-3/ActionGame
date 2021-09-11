@@ -11,10 +11,10 @@ public class CameraManager : MonoBehaviour
     public float camSpeed;
     public Vector3 initialCameraPos;
     public bool rockOn;
-    GameObject nearOne;
+    public GameObject nearOne;
     Quaternion initQuaternion;
     GameObject rockOnObject;
-    [SerializeField] float rockOnMarkerSize; 
+    [SerializeField] float rockOnMarkerSize=default; 
 
     void Start()
     {
@@ -27,24 +27,26 @@ public class CameraManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))//ロックオンボタン押下時
+        if (Input.GetKeyDown(KeyCode.Semicolon))//ロックオンボタン押下時、ロックオン・オフを切り替える処理
         {
             targetObjList.Clear();
-            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))//シーン中のEnemyタグのついたオブジェクト達を取得
             {
                 int i = 1;
+                //画面中央、キャラより奥にいて一定の距離内にいる敵にロックオン候補を絞る
                 if (Vector3.Angle(playerObj.transform.position - Camera.main.transform.position, enemy.transform.position - playerObj.transform.position) < 60 && (playerObj.transform.position - enemy.transform.position).magnitude < 20)
                 {
                     i++;
                     targetObjList.Add(enemy);
-//                    Debug.Log($"ロックオン候補{i}は距離{(playerObj.transform.position - enemy.transform.position).magnitude}");
                 }
             }
-  //          Debug.Log($"敵の数は{targetObjList.Count}体。");
+
+            //ロックオン可能な敵がいた場合
             if (targetObjList.Count != 0)
             {
                 rockOn = !rockOn;
 
+                //最も近い敵をnearOneとする
                 nearOne = targetObjList[0];
                 foreach (GameObject enemy in targetObjList)
                 {
@@ -59,8 +61,9 @@ public class CameraManager : MonoBehaviour
 
         if (!rockOn)//非ロックオン時
         {
-            if (rockOnObject != null)
+            if (rockOnObject != null)//ロックオン中の場合
             {
+                //ロックオンを解除し、マーカーを非表示に
                 rockOnObject.GetComponentInChildren<EnemyUIManager>().rockOnMarker.enabled = false;
             }
 
@@ -70,10 +73,10 @@ public class CameraManager : MonoBehaviour
 
             ResetCameraAngle();
 
-            if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftShift))//デバッグ用コマンド　カメラの初期位置調整用
-            {
-                Start();
-            }
+            //if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftShift))//デバッグ用コマンド　カメラの初期位置調整用
+            //{
+            //    Start();
+            //}
         }
         else//ロックオン時
         {
@@ -110,8 +113,6 @@ public class CameraManager : MonoBehaviour
     {
         transform.position += playerObj.transform.position - previousPlayerPos;//ここ、ロックオン時にも解除時にもなめらかに移行するようにできないか
         previousPlayerPos = playerObj.transform.position;
-//        transform.rotation = Quaternion.Slerp(transform.rotation, new Quaternion(10/180f,transform.rotation.y, transform.rotation.z, transform.rotation.w), 0.2f);
-//どんどん斜めになっていく。地面に対して一定の角度を目指して徐々に位置を修正したい。
     }
 
     void RotateCameraByKeyboard()
@@ -119,23 +120,23 @@ public class CameraManager : MonoBehaviour
 
         float keyInputX = 0;
 
-        if (Input.GetKey(KeyCode.K))
+        if (Input.GetKey(KeyCode.J))
         {
-            keyInputX += 2f;
+            keyInputX -= 2.5f;
         }
-        if (Input.GetKey(KeyCode.H))
+        if (Input.GetKey(KeyCode.L))
         {
-            keyInputX -= 2f;
+            keyInputX += 2.5f;
         }
 
-        if (Input.GetKey(KeyCode.I))
-        {
-            keyInputX += 5f;
-        }
-        if (Input.GetKey(KeyCode.Y))
-        {
-            keyInputX -= 5f;
-        }
+        //if (Input.GetKey(KeyCode.I))
+        //{
+        //    keyInputX += 5f;
+        //}
+        //if (Input.GetKey(KeyCode.Y))
+        //{
+        //    keyInputX -= 5f;
+        //}
         //if (Input.GetKey(KeyCode.U))
         //{
         //    keyInputX *= 3f;
@@ -144,7 +145,7 @@ public class CameraManager : MonoBehaviour
         transform.RotateAround(previousPlayerPos, Vector3.up, keyInputX * Time.deltaTime * camSpeed);
     }
 
-    void ResetCameraAngle()
+    void ResetCameraAngle()//カメラの上下アングルを最初の角度に戻す。今や意味不明のオーパーツ。
     {
         Quaternion previousRotation = this.transform.localRotation;
         Vector3 rotationAngles = previousRotation.eulerAngles;
