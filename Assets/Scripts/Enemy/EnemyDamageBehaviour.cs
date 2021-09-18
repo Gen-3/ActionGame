@@ -19,7 +19,7 @@ public class EnemyDamageBehaviour : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-//        animator.ResetTrigger("hitDamage");//強攻撃のダブリを防ぐためにコメントアウトしてみます
+        animator.ResetTrigger("hitDamage");//強攻撃のダブリを防ぐためにコメントアウトしてみます→意味不明　解除しておきます
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
