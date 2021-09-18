@@ -2,11 +2,7 @@ fileFormatVersion: 2
 guid: 8132870baac8247c7abf2ab71003e277
 NativeFormatImporter:
   externalObjects: {}
-<<<<<<< HEAD
   mainObjectFileID: 0
-=======
-  mainObjectFileID: 7400000
->>>>>>> parent of 4c73697 (Revert "0911　ローリング実装（向きはまだ）")
   userData: 
   assetBundleName: 
   assetBundleVariant: 
