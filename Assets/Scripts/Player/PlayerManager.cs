@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
 
-    float inputX;
-    float inputZ;
+    float x;
+    float z;
     public Collider weaponCollider;
 
     Rigidbody rb;
@@ -24,7 +24,8 @@ public class PlayerManager : MonoBehaviour
     public SoundManager soundManager;
 
     //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+    float inputHorizontal;
+    float inputVertical;
 
     float moveSpeed = 3f;
     [SerializeField] float defaultMoveSpeed = 3.0f;
@@ -45,12 +46,10 @@ public class PlayerManager : MonoBehaviour
 
     public Vector3 rollingForward;
     Vector3 moveForward;
-    public CapsuleCollider capsuleCollider;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        capsuleCollider = GetComponent<CapsuleCollider>();
         animator = GetComponent<Animator>();
         //        weaponCollider = GetComponentInChildren<CapsuleCollider>();
         DisableWeaponCollider();
@@ -63,7 +62,6 @@ public class PlayerManager : MonoBehaviour
         float sliderValue = HP / MaxHP;
         uiManager.UpdateHP(sliderValue);
 
-        Debug.Log(capsuleCollider);
     }
 
     void Update()
@@ -75,22 +73,22 @@ public class PlayerManager : MonoBehaviour
         if (isRolling)//ローリング継続時
         {
             rollingCount -= 1;
+            Debug.Log(rb.velocity.magnitude);
             if (rollingCount < 0)
             {
                 isRolling = false;
             }
-            return;//ここでreturnしておかないと、ローリングを連打したときに同一方向にローリングし続けてしまう
+            return;
         }
 
-        inputX = Input.GetAxisRaw("Horizontal");
-        inputZ = Input.GetAxisRaw("Vertical");
+        x = Input.GetAxisRaw("Horizontal");
+        z = Input.GetAxisRaw("Vertical");
 
         if (Input.GetKey(KeyCode.I))//弱攻撃ボタン押下時
         {
             if (canAttack)
             {
                 animator.SetTrigger("attack1");
-                animator.ResetTrigger("attack3");
             }
         }
 
@@ -106,15 +104,19 @@ public class PlayerManager : MonoBehaviour
             }
         }
 
+        //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        inputHorizontal = Input.GetAxisRaw("Horizontal");
+        inputVertical = Input.GetAxisRaw("Vertical");
+        //A~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         if (Input.GetKeyDown(KeyCode.K))
         {
-            if (inputX != 0 || inputZ != 0)//入力があるとき、入力方向にローリング
+            if (x != 0 || z != 0)//入力があるとき、入力方向にローリング
             {
                 isRolling = true;
-                animator.SetTrigger("rolling");
+                animator.SetTrigger("isRolling");
                 rollingForward = transform.forward;
-                rollingCount = 12;
+                rollingCount = 8;
             }
             else//入力がないとき、パリイ？
             {
@@ -122,30 +124,6 @@ public class PlayerManager : MonoBehaviour
             }
 
         }
-
-        ////////////////////////////////////////////////////////////////////////////////////////
-        //if (!isSlow)
-        //{
-        //    if (inputX != 0 || inputZ != 0)//入力があるときはisMovingをtrueにして動かす
-        //    {
-        //        moveSpeed = defaultMoveSpeed;
-        //        animator.SetBool("isMoving", true);
-
-        //        InputDirectionConvertor();
-        //    }
-        //    else//入力がないときはisMovingをfalseにする
-        //    {
-        //        animator.SetBool("isMoving", false);
-        //    }
-        //}
-        //else//isSlow時
-        //{
-        //    animator.SetBool("isMoving", false);
-        //    moveSpeed = defaultMoveSpeed / 6;
-
-        //    InputDirectionConvertor();
-        //}
-        ////////////////////////////////////////////////////////////////////////////////////////
     }
 
     public void Damage()
@@ -163,7 +141,7 @@ public class PlayerManager : MonoBehaviour
         if (knockOut) { return; }//ノックアウト時は入力を無視
         if (!isSlow)
         {
-            if (inputX != 0 || inputZ != 0)//入力があるときはisMovingをtrueにして動かす
+            if (x != 0 || z != 0)//入力があるときはisMovingをtrueにして動かす
             {
                 moveSpeed = defaultMoveSpeed;
                 animator.SetBool("isMoving", true);
@@ -193,7 +171,7 @@ public class PlayerManager : MonoBehaviour
         if (!isRolling)
         {
             // 方向キーの入力値とカメラの向きから、移動方向を決定
-            moveForward = cameraForward * inputZ + Camera.main.transform.right * inputX;
+            moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
         }
 
         // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
@@ -206,6 +184,7 @@ public class PlayerManager : MonoBehaviour
         {
             rb.velocity = moveForward * moveSpeed * 1.5f + new Vector3(0, rb.velocity.y, 0);
         }
+
 
         //ロックオン解除時
         if (!cameraManager.rockOn)
@@ -255,17 +234,6 @@ public class PlayerManager : MonoBehaviour
     public void SetOffSuperArmor()
     {
         animator.SetBool("superArmor", false);
-    }
-
-    public void SetOnRollingInvincible()
-    {
-        capsuleCollider.enabled = false;
-        Debug.Log("無敵開始！");
-    }
-    public void SetOffRollingInvincible()
-    {
-        capsuleCollider.enabled = true;
-        Debug.Log("無敵終了…");
     }
 
 
