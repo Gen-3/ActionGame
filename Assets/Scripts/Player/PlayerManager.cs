@@ -107,14 +107,14 @@ public class PlayerManager : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K) && !isSlow)
         {
             if (inputX != 0 || inputZ != 0)//入力があるとき、入力方向にローリング
             {
                 isRolling = true;
                 animator.SetTrigger("rolling");
                 rollingForward = transform.forward;
-                rollingCount = 12;
+                rollingCount = 8;
             }
             else//入力がないとき、パリイ？
             {
@@ -204,7 +204,7 @@ public class PlayerManager : MonoBehaviour
         }
         else//ローリング中ならスピードアップ
         {
-            rb.velocity = moveForward * moveSpeed * 1.5f + new Vector3(0, rb.velocity.y, 0);
+            rb.velocity = moveForward * moveSpeed * 1.2f + new Vector3(0, rb.velocity.y, 0);
         }
 
         //ロックオン解除時

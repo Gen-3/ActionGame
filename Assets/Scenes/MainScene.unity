@@ -9399,7 +9399,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: bead0199fb2cd8d40832fcf68aeefc5f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.209
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -11185,6 +11185,10 @@ PrefabInstance:
       propertyPath: cameraManager
       value: 
       objectReference: {fileID: 1180620754}
+    - target: {fileID: 3902288762480959927, guid: 4293a7ea3069243c585a20689cac2cbb, type: 3}
+      propertyPath: defaultMoveSpeed
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4293a7ea3069243c585a20689cac2cbb, type: 3}
 --- !u!1001 &1361727617
