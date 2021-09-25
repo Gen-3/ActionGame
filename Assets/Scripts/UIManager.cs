@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public Image rockOnMarker;
 
     public void UpdateHP(float sliderValue)
     {

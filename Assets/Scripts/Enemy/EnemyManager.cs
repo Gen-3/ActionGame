@@ -128,7 +128,6 @@ public class EnemyManager : MonoBehaviour
                 animator.GetComponent<NavMeshAgent>().speed = 0;
                 animator.SetTrigger("knockOut");
                 animator.tag = "Untagged";
-                enemyUIManager.rockOnMarker.enabled = false;
                 DisableWeaponCollider();
             }
         }
@@ -136,6 +135,7 @@ public class EnemyManager : MonoBehaviour
 
     public void KnockOut()
     {
+        weaponCollider.enabled = false;
         animator.enabled=false;
         enemyUIManagerGO.SetActive(false);
 //        ragdollManager.SetRagdoll(true);

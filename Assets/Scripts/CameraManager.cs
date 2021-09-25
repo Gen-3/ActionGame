@@ -14,7 +14,7 @@ public class CameraManager : MonoBehaviour
     public GameObject nearOne;
     Quaternion initQuaternion;
     GameObject rockOnObject;
-    [SerializeField] float rockOnMarkerSize=default; 
+    [SerializeField] UIManager uIManager=default;
 
     void Start()
     {
@@ -29,6 +29,11 @@ public class CameraManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Semicolon))//ロックオンボタン押下時、ロックオン・オフを切り替える処理
         {
+            if (rockOn)
+            {
+                rockOn = false;
+                return;
+            }
             targetObjList.Clear();
             foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))//シーン中のEnemyタグのついたオブジェクト達を取得
             {
@@ -56,15 +61,16 @@ public class CameraManager : MonoBehaviour
                     }
                 }
             }
+
         }
 
 
         if (!rockOn)//非ロックオン時
         {
-            if (rockOnObject != null)//ロックオン中の場合
+            if (rockOnObject != null)//ロックオンをしていて敵を倒した際の処理
             {
                 //ロックオンを解除し、マーカーを非表示に
-                rockOnObject.GetComponentInChildren<EnemyUIManager>().rockOnMarker.enabled = false;
+                uIManager.rockOnMarker.enabled = false;
             }
 
             MoveCamera();
@@ -84,25 +90,26 @@ public class CameraManager : MonoBehaviour
             {
                 rockOn = false;
                 rockOnObject = null;
+                uIManager.rockOnMarker.enabled = false;
             }
-            else
+            else//ロックオン時の処理
             {
-                //ロックオンマーカーの位置を敵の中心からカメラ方向に少し進めた所にし、距離に応じて大きさを調整して見かけの大きさが一定になるようにする
-                Vector3 centerOfnearOne = nearOne.transform.position + new Vector3(0,nearOne.transform.localScale.magnitude/2,0);
-                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position = centerOfnearOne + (Camera.main.transform.position - centerOfnearOne).normalized * nearOne.transform.localScale.magnitude;
-                float distance = Vector3.Distance(Camera.main.transform.position, nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.position);
-                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.transform.localScale = Vector3.one * distance * rockOnMarkerSize / 100;
-                    
-                nearOne.GetComponentInChildren<EnemyUIManager>().rockOnMarker.enabled = true;
-
+                //ロックオンマーカーを表示
                 rockOnObject = nearOne;
 
+                if ((playerObj.transform.position - rockOnObject.transform.position).magnitude > 20)
+                {
+                    rockOn = false;
+                    return;
+                }
 
-                previousTargetPos = nearOne.transform.position;
-                Vector3 cameraMoveTo = playerObj.transform.position + (new Vector3((playerObj.transform.position - nearOne.transform.position).normalized.x, 0, (playerObj.transform.position - nearOne.transform.position).normalized.z) * 10) + new Vector3(0, initialCameraPos.y, 0);
-                transform.position = Vector3.Slerp(transform.position, cameraMoveTo, 0.2f);
+                uIManager.rockOnMarker.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, rockOnObject.transform.position);
+                uIManager.rockOnMarker.enabled = true;
+
+                previousTargetPos = nearOne.transform.position;//カメラを敵とプレイヤーの延長線上に動かす
+                transform.position = Vector3.Slerp(transform.position, playerObj.transform.position + (new Vector3((playerObj.transform.position - nearOne.transform.position).normalized.x, 0, (playerObj.transform.position - nearOne.transform.position).normalized.z) * 10) + new Vector3(0, initialCameraPos.y, 0), 0.2f);//カメラ位置の移動
+                transform.LookAt(nearOne.transform.position);//カメラをターゲットに向ける
                 previousPlayerPos = playerObj.transform.position;
-                transform.LookAt(nearOne.transform.position);
 
 
             }
@@ -115,7 +122,7 @@ public class CameraManager : MonoBehaviour
         previousPlayerPos = playerObj.transform.position;
     }
 
-    void RotateCameraByKeyboard()
+    void RotateCameraByKeyboard()//カメラの左右移動
     {
 
         float keyInputX = 0;
@@ -128,19 +135,6 @@ public class CameraManager : MonoBehaviour
         {
             keyInputX += 2.5f;
         }
-
-        //if (Input.GetKey(KeyCode.I))
-        //{
-        //    keyInputX += 5f;
-        //}
-        //if (Input.GetKey(KeyCode.Y))
-        //{
-        //    keyInputX -= 5f;
-        //}
-        //if (Input.GetKey(KeyCode.U))
-        //{
-        //    keyInputX *= 3f;
-        //}
 
         transform.RotateAround(previousPlayerPos, Vector3.up, keyInputX * Time.deltaTime * camSpeed);
     }

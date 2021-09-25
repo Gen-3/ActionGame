@@ -79,7 +79,6 @@ public class PlayerManager : MonoBehaviour
             {
                 isRolling = false;
             }
-            return;//ここでreturnしておかないと、ローリングを連打したときに同一方向にローリングし続けてしまう
         }
 
         inputX = Input.GetAxisRaw("Horizontal");
@@ -107,7 +106,7 @@ public class PlayerManager : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.K) && !isSlow)
+        if (Input.GetKeyDown(KeyCode.K) && !isSlow && !isRolling)
         {
             if (inputX != 0 || inputZ != 0)//入力があるとき、入力方向にローリング
             {
@@ -260,12 +259,10 @@ public class PlayerManager : MonoBehaviour
     public void SetOnRollingInvincible()
     {
         capsuleCollider.enabled = false;
-        Debug.Log("無敵開始！");
     }
     public void SetOffRollingInvincible()
     {
         capsuleCollider.enabled = true;
-        Debug.Log("無敵終了…");
     }
 
 
