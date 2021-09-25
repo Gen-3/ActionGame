@@ -880,7 +880,7 @@ MonoBehaviour:
   applySpeed: 0.3
   attackID: 0
   HP: 0
-  MaxHP: 999
+  MaxHP: 9991
   atk: 0
   damageAmount: 0
   uiManager: {fileID: 0}
